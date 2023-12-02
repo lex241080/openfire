@@ -1,0 +1,53 @@
+version: '3.5'
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=H09fW4
+      - MYSQL_PASSWORD=openfire
+      - MYSQL_DATABASE=openfire
+      - MYSQL_USER=openfire
+    networks:
+      openfire-network:
+        aliases:
+          - db
+
+  app:
+    image: lex241080/openfire
+    restart: always
+    environment:
+      - TZ=Europe/Minsk
+    volumes:
+      - ./conf:/opt/openfire/conf
+      - ./plugins:/opt/openfire/plugins
+      - ./ssl:/opt/openfire/resources/security
+    ports:
+      - 5222:5222
+      - 5223:5223
+      - 5262:5262
+      - 5263:5263
+      - 5269:5269
+      - 5270:5270
+      - 5275:5275
+      - 5276:5276
+      - 7070:7070
+      - 7443:7443
+      - 7777:7777
+      - 9090:9090
+    links:
+      - db
+    networks:
+      openfire-network:
+        aliases:
+          - app
+
+networks:
+  openfire-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-openfire
