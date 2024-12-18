@@ -6,7 +6,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=H09fW4
+      - MYSQL_ROOT_PASSWORD=CHANGETHISPASSWORD
       - MYSQL_PASSWORD=openfire
       - MYSQL_DATABASE=openfire
       - MYSQL_USER=openfire
@@ -16,7 +16,8 @@ services:
           - db
 
   app:
-    image: lex241080/openfire
+    image: openfire
+    build: .
     restart: always
     environment:
       - TZ=Europe/Minsk
